@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: location-producer
+  name: location-producer
+spec:
+  ports:
+  - name: "5555"
+    port: 5555
+    targetPort: 5555
+    nodePort: 30003
+  selector:
+    service: location-producer
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: location-producer
+  name: location-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: location-producer
+  template:
+    metadata:
+      labels:
+        service: location-producer
+    spec:
+      containers:
+      - image: ericcgu/nd064-location-producer:1.0.0
+        name: location-producer
+        imagePullPolicy: Always
+      restartPolicy: Always
