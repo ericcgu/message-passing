@@ -9,7 +9,7 @@ import json
 
 kafka_url = "kafka-service:9092"
 kafka_topic = "locations"
-
+kafka_producer = KafkaProducer(bootstrap_servers=kafka_url)
 class LocationServicer(location_pb2_grpc.LocationServiceServicer):
     def Create(self, request, context):
 
@@ -20,7 +20,7 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
         }
 
         print('processing request ' + request)
-        producer.send(kafka_topic, json.dumps(request, indent=2).encode('utf-8'))
+        kafka_producer.send(kafka_topic, json.dumps(request, indent=2).encode())
 
         return location_pb2.Location(**request)
 
@@ -28,14 +28,12 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
 print("Connecting to kafka url: " + kafka_url)
 print("Sending kafka topics: " + kafka_topic)
 
-producer = KafkaProducer(bootstrap_servers=kafka_url)
-
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
 
 location_pb2_grpc.add_LocationServiceServicer_to_server(
     LocationServiceServicer(), server
 )
 
-server.add_insecure_port("[::]:5555")
+server.add_insecure_port("[::]:5005")
 server.start()
 server.wait_for_termination()

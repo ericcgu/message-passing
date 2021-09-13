@@ -1,19 +1,21 @@
-Monolith would be broken up as is as Management approved the Proof of Concept:
+Monolith should start with current services as Management approved the Proof of Concept:
 
 1. FRONT END SERVICE - User Interface Service for Users
-    - RATIONALE: Need a mobile / web ui. Reasoning is that this would be written in javascript of swift/android(java). 
+    - RATIONALE: Need a mobile / web ui. 
+    Reasoning is that this would be written in javascript of swift/android(java). 
     We need a seperate service with a seperate team and work stream effort.
-2. LOCATION PRODUCER - 
+2. LOCATION PRODUCER - Location Data Ingestion / Producer / Publisher
     - RATIONALE: Since Minimum Viable Product (MVP) is supposed to handle a large volume of location data that will be ingested, we need to use gRPC and KAFKA
-    to scale up the high volume. The LOCATION PRODUCER service is designed to accept and send location data to KAFKA QUEUE in a scalable way
-3. KAFKA QUEUE  
+    to scale up with the anticipated high volume of location data. 
+    The LOCATION PRODUCER service is designed to accept and send location data to KAFKA QUEUE in a scalable way that shields the db from locking.
+3. KAFKA QUEUE  - Queue to Hold Location Data
     - RATIONALE: The LOCATION PRODUCER would send high volume of location data through protobuf/gRPC to KAFKA queue. 
-4. LOCATION CONSUMER
-    - RATIONALE: The LOCATION CONSUMER service is designed to subscribe and consume the location topic on the KAFKA queue. Once receiving messages, the LOCATION 
-    CONSUMER WOULD persist LOCATION DATA IN DB
-5. PEOPLE SERVICE
-    - RATIONAL: Due to cost and mvp scope limitations, since this service does not need scaling at this time, this would be a simple REST call into the database.
-6. CONNECTION SERVICE: This reads LOCATION AND 
+4. LOCATION CONSUMER - Location Data Subscriber / Consumer
+    - RATIONALE: The LOCATION CONSUMER service is designed to subscribe and consume the location topic on the KAFKA queue. 
+    Once receiving messages, the LOCATION CONSUMER will persist LOCATION DATA in the database.
+5. PEOPLE SERVICE - Get and Set People Data.
+    - RATIONAL: Due to cost and mvp scope limitations, this service does not need scaling at this time, this would be a simple REST call into the database.
+6. CONNECTION SERVICE: Combines People and Location Data to build Connection Service.
     - RATIONAL: This service would combine PEOPLE AND LOCATION data to serve CONNECTION data from the database.
-7. DATABASE SERVICE
+7. DATABASE SERVICE - Storage.
     - RATIONAL: Due to cost and mvp concerns, the database will stay as is and store PEOPLE and LOCATION data.
