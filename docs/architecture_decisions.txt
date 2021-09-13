@@ -9,7 +9,8 @@ Monolith should start with current services as Management approved the Proof of 
     to scale up with the anticipated high volume of location data. 
     The LOCATION PRODUCER service is designed to accept and send location data to KAFKA QUEUE in a scalable way that shields the db from locking.
 3. KAFKA QUEUE  - Queue to Hold Location Data
-    - RATIONALE: The LOCATION PRODUCER would send high volume of location data through protobuf/gRPC to KAFKA queue. 
+    - RATIONALE: The LOCATION PRODUCER would send high volume of location data through protobuf/gRPC to KAFKA queue.
+    - Leveraged: http://www.smartjava.org/content/minimal-kafka-instance-for-k8s/ 
 4. LOCATION CONSUMER - Location Data Subscriber / Consumer
     - RATIONALE: The LOCATION CONSUMER service is designed to subscribe and consume the location topic on the KAFKA queue. 
     Once receiving messages, the LOCATION CONSUMER will persist LOCATION DATA in the database.

@@ -2,9 +2,7 @@ import grpc
 import location_pb2
 import location_pb2_grpc
 
-print("Sending sample payload...")
-
-channel = grpc.insecure_channel("localhost:30003")
+channel = grpc.insecure_channel("localhost:5005")
 stub = location_pb2_grpc.LocationServiceStub(channel)
 
 location1 = location_pb2.LocationMessage(
@@ -21,7 +19,3 @@ location2 = location_pb2.LocationMessage(
 
 response1 = stub.Create(location1)
 response2 = stub.Create(location2)
-
-print("Responses")
-print(response1)
-print(response2)
