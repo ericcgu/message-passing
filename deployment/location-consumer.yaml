@@ -2,36 +2,62 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: location-producer
-  name: location-producer
+    service: location-consumer
+  name: location-consumer
 spec:
   ports:
-  - name: "5555"
-    port: 5555
-    targetPort: 5555
-    nodePort: 30003
+  - name: "5000"
+    port: 5000
+    targetPort: 5000
+    nodePort: 30004
   selector:
-    service: location-producer
+    service: location-consumer
   type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: location-producer
-  name: location-producer
+    service: location-consumer
+  name: location-consumer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: location-producer
+      service: location-consumer
   template:
     metadata:
       labels:
-        service: location-producer
+        service: location-consumer
     spec:
       containers:
-      - image: ericcgu/nd064-location-producer:1.0.0
-        name: location-producer
+      - image: ericcgu/nd064-location-consumer:1.0.0
+        name: location-consumer
         imagePullPolicy: Always
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_NAME
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_PORT
       restartPolicy: Always

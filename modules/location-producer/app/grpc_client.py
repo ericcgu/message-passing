@@ -6,13 +6,13 @@ channel = grpc.insecure_channel("localhost:5005")
 stub = location_pb2_grpc.LocationServiceStub(channel)
 
 location1 = location_pb2.LocationMessage(
-    person_id=50,
+    person_id=1,
     latitude=300,
     longitude=100
 )
 
 location2 = location_pb2.LocationMessage(
-    person_id=51,
+    person_id=1,
     latitude=100,
     longitude=200
 )

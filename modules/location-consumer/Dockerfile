@@ -9,4 +9,4 @@ EXPOSE 5000
 
 COPY . .
 
-ENTRYPOINT [ "python", "app/grpc_host.py" ]
+ENTRYPOINT [ "python", "app/app.py" ]

@@ -1,3 +1,4 @@
+# I don't want to add more because typically I would create the API via FastAPI, which auto generates OpenAPI Specifications.
 openapi: 3.0.0
 info:
   description: API for interacting with Persons from UdaConnect
